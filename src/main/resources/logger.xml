@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+ 		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <bean id="ConsoleEventLogger" class="oooshit.eventLogger.ConsoleEventLogger"/>
+
+    <bean id="FileEventLogger" class="oooshit.eventLogger.FileEventLogger" init-method="init" >
+        <constructor-arg value="target/events_log.txt"/>
+    </bean>
+
+    <bean id="CacheFileEventLogger"
+          class="oooshit.eventLogger.CacheFileEventLogger" destroy-method="destroy" parent="FileEventLogger">
+        <constructor-arg index="1" value="5" />
+    </bean>
+
+    <bean id="CombineEventLogger" class="oooshit.eventLogger.CombineEventLogger">
+        <constructor-arg>
+            <list>
+                <ref bean="ConsoleEventLogger"/>
+                <ref bean="FileEventLogger"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>
